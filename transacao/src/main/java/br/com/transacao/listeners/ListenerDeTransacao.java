@@ -27,6 +27,7 @@ public class ListenerDeTransacao {
 		estabelecimentoRepository.save(transacao.getEstabelecimento());
 		cartaoRepository.save(transacao.getCartao());
 		transacaoRepository.save(transacao);
+		System.out.println("Cadastrou rapaziada" + transacao.getId());
 	}
 
 }

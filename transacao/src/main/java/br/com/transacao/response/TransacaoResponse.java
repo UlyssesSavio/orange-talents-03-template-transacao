@@ -1,16 +1,15 @@
-package br.com.transacao.model;
+package br.com.transacao.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity
-public class Transacao {
+import br.com.transacao.model.Cartao;
+import br.com.transacao.model.Estabelecimento;
 
-	@Id
+public class TransacaoResponse {
+
 	private String id;
 	private BigDecimal valor;
 	@OneToOne
@@ -19,15 +18,21 @@ public class Transacao {
 	private Cartao cartao;
 	private LocalDateTime efetivadaEm;
 
-	public Transacao() {
+	public TransacaoResponse() {
 	}
 
-	public Transacao(BigDecimal valor, Estabelecimento estabelecimento, Cartao cartao, LocalDateTime efetivadaEm) {
+	public TransacaoResponse(String id, BigDecimal valor, Estabelecimento estabelecimento, Cartao cartao,
+			LocalDateTime efetivadaEm) {
 		super();
+		this.id = id;
 		this.valor = valor;
 		this.estabelecimento = estabelecimento;
 		this.cartao = cartao;
 		this.efetivadaEm = efetivadaEm;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public BigDecimal getValor() {
@@ -45,9 +50,4 @@ public class Transacao {
 	public LocalDateTime getEfetivadaEm() {
 		return efetivadaEm;
 	}
-
-	public String getId() {
-		return id;
-	}
-
 }
