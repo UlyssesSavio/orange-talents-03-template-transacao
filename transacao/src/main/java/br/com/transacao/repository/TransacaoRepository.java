@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.transacao.model.Transacao;
 
-public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
-
-	List<Transacao> findFirst10ById(String id);
+public interface TransacaoRepository extends JpaRepository<Transacao, String> {
 
 	List<Transacao> findFirst10ByCartaoId(String id);
 

@@ -22,7 +22,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
@@ -68,6 +68,8 @@ services:
       DB_DATABASE: keycloak
       DB_USER: keycloak
       DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
       KEYCLOAK_FRONTEND_URL: http://keycloak:8080/auth
 
@@ -154,6 +156,48 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
+
+
+  db:
+    container_name: mariadb
+    image: mariadb
+    networks:
+      - rede-spring
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '3306:3306'
+
+  transacao:
+    container_name: transacao
+    build:  ./
+    restart: on-failure
+    ports:
+      - '8081:8081'
+    networks:
+      - rede-spring
+    depends_on:
+      - grafana
+      - prometheus
+      - jaeger
+      - kafka
+      - zookeeper
+      - contas
+      - analise
+      - transacoes
+      - postgres
+      - db
+      - keycloak
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/mysql-mariadb?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080/auth
+      ENDERECO_TRANSACAO: transacoes
+
+
 
 volumes:
   grafana-volume:

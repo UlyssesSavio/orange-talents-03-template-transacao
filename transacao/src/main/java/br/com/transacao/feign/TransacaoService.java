@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.transacao.model.TransacaoRequest;
 
-@FeignClient(name = "transacao", url = "http://localhost:7777/")
+@FeignClient(name = "transacao", url = "http://${endereco.transacao}:7777/")
 public interface TransacaoService {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/api/cartoes", consumes = "application/json")
